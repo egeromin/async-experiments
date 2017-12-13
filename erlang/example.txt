@@ -1,0 +1,10 @@
+Hello
+
+Here is some example text with exactly 2 emails:
+
+- egeromin@gmail.com
+- emanuel@next42.net
+
+Thanks for reading!
+
+

@@ -10,3 +10,5 @@ def get_rabbit_url():
         username, password, host, port, vhost
     )
     return url
+
+spam_domain = 'gmail.com'

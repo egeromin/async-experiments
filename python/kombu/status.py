@@ -5,8 +5,9 @@ from config import get_rabbit_url, spam_domain
 
 class EmailStatus:
 
-    def __init__(self):
+    def __init__(self, connection):
         self.spammable_emails_found = set()
+        self.producer = connection.Producer()
 
     def find_new_spammable_emails(self, emails):
         emails_split = [email.split('@') for email in emails]
@@ -17,7 +18,7 @@ class EmailStatus:
         return new_spammable_emails
 
     def spam(self, spammable_email):
-        pass
+        self.producer.publish('spam me!', routing_key=spammable_email)
 
     def update(self, emails, message):
         new_spammable_emails = self.find_new_spammable_emails(emails)
@@ -31,7 +32,7 @@ class EmailStatus:
 def main():
     with Connection(get_rabbit_url()) as connection:
         status_queue = Queue('status', exchange='')
-        email_status = EmailStatus()
+        email_status = EmailStatus(connection)
         with Consumer(
             connection,
             queues=[status_queue],

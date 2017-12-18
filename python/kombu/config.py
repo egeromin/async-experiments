@@ -11,4 +11,6 @@ def get_rabbit_url():
     )
     return url
 
+
 spam_domain = 'gmail.com'
+spam_sender = 'info@emanuelgeromin.com'

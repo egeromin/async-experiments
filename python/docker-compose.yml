@@ -1,0 +1,18 @@
+version: "2.1"
+
+services:
+
+  rabbit:
+    container_name: emailcruncher-rabbit
+    image: rabbitmq:3.6.9
+    env_file:
+      - rabbit.env
+    ports:
+      - "127.0.0.1:5779:5672"
+      - "19090:15672"
+    command: rabbitmq-server
+    healthcheck:
+      test: "rabbitmqctl wait /var/lib/rabbitmq/mnesia/rabbit@$$(hostname).pid"
+      interval: 3s
+      timeout: 30s
+      retries: 2

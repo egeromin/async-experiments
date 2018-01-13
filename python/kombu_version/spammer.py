@@ -13,7 +13,7 @@ class Spammer:
     def __init__(self, name):
         self.name = name
         self.find_mx_record()
-        self.msg = """Dear Colleague,
+        self.msg = """Dear Friend,
         
 Some interesting information about you was found by the Email Cruncher. Do take a look.
 
@@ -53,7 +53,8 @@ def main():
 
     spammer = Spammer(args.name)
     with Connection(get_rabbit_url()) as connection:
-        main_queue = Queue(args.name, exchange=spammer_exchange)
+        main_queue = Queue(args.name, exchange=spammer_exchange,
+                           routing_key=args.name)
         with Consumer(
             connection,
             queues=[main_queue],

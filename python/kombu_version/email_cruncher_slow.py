@@ -40,7 +40,7 @@ class EmailCruncherRegex:
 def main():
     with Connection(get_rabbit_url()) as connection:
         cruncher = EmailCruncherRegex(connection)
-        main_queue = Queue(exchange=email_exchange)
+        main_queue = Queue('slow-cruncher', exchange=email_exchange)
         with Consumer(
             connection,
             queues=[main_queue],

@@ -43,7 +43,7 @@ def main():
             connection,
             queues=[main_queue],
             callbacks=[cruncher.crunch],
-            prefetch_count=1
+            prefetch_count=1  # disable prefetching
         ):
             while True:
                 connection.drain_events()  # start consuming

@@ -3,3 +3,5 @@ __pycache__
 *.dump
 *.idea
 
+python/kombu_version/email_config.py
+python/celery_version/email_config.py

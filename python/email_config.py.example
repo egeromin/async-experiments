@@ -1,0 +1,4 @@
+spam_sender = 'your-email@gmail.com'
+spam_password = 'your-password'
+mx_record = 'smtp.gmail.com:587'  # addres of your email provider's SMTP server.
+spam_domain = 'apple.com'  # look for apple addresses

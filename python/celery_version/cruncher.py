@@ -5,15 +5,16 @@ import os
 
 from kombu import Queue, Exchange
 
-from config import spam_domain, spam_sender, get_rabbit_url
+import config
 import dns.resolver
 import smtplib
 
 
 spammer_queue_name = os.getenv("SPAMMER_QUEUE", 'spammer')
 
-
-app = celery.Celery('cruncher', broker=get_rabbit_url())
+# set up celery
+# set up queues
+app = celery.Celery('cruncher', broker=config.get_rabbit_url())
 app.conf.task_queues = {
     Queue('crunch', routing_key='crunch'),  # to default exchange
     Queue('status', routing_key='status'),  # to default exchange
@@ -21,6 +22,7 @@ app.conf.task_queues = {
     Queue(spammer_queue_name, routing_key=spammer_queue_name,
           exchange=Exchange('spammer_exchange', type='direct'))
 }
+# set up routes to make sure each task gets routed to the right queue
 app.conf.task_routes = {
     'cruncher.crunch_regex': {'queue': 'crunch', 'routing_key': 'crunch'},
     'cruncher.find_new_spammable_emails':
@@ -65,18 +67,15 @@ def find_new_spammable_emails(emails):
     print("Got emails {}".format(emails))
     emails_split = [email.split('@') for email in emails]
     spammable_emails = [name for name, domain in emails_split
-                        if domain == spam_domain]
+                        if domain == config.spam_domain]
     new_spammable_emails = set(spammable_emails) - spammable_emails_found
     spammable_emails_found.update(new_spammable_emails)
     print("Found {} new spammable emails".format(len(new_spammable_emails)))
     return list(new_spammable_emails)
 
 
-resolver = dns.resolver.Resolver()
-records = resolver.query(spam_domain, 'MX')
-mx_record = str(records[0].exchange).strip().lower()
 msg = """Dear Friend,
-        
+
 Some interesting information about you was found by the Email Cruncher. Do take a look.
 
 Best,
@@ -89,10 +88,12 @@ The Email Cruncher
 def spam(email):
     """Spam the end user!"""
     print("Spam got {}".format(email))
-    email = "{}@{}".format(email, spam_domain)
-    server = smtplib.SMTP(mx_record)
-    print(server.ehlo('emanuelgeromin.com'))
-    print(server.sendmail(spam_sender, [email], msg))
+    email = "{}@{}".format(email, config.spam_domain)
+    server = smtplib.SMTP(config.mx_record)
+    print(server.ehlo())
+    print(server.starttls())
+    print(server.login(config.spam_sender, config.spam_password))
+    print(server.sendmail(from_addr=config.spam_sender, to_addrs=[email], msg=msg))
     server.quit()
 
 

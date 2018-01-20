@@ -1,0 +1,9 @@
+Hello
+
+Here is some example text with exactly 3 emails:
+
+- randomuser@apple.com
+- randomemail@gmail.com
+- randomuser2@apple.com
+
+You can use it to try out the email cruncher.

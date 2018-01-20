@@ -1,5 +1,8 @@
 """
-Regex version of the email cruncher
+Slow version of the email cruncher
+
+Note: this is identical to the regex version, except that it sleeps for
+5 seconds per request. Todo: implement a proper alternative!
 """
 import re
 from time import sleep
@@ -12,7 +15,7 @@ from exchanges import email_exchange
 email_regex = r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+"
 
 
-class EmailCruncherRegex:
+class EmailCruncherSlow:
 
     def __init__(self, connection):
         self.producer = connection.Producer()
@@ -39,7 +42,7 @@ class EmailCruncherRegex:
 
 def main():
     with Connection(get_rabbit_url()) as connection:
-        cruncher = EmailCruncherRegex(connection)
+        cruncher = EmailCruncherSlow(connection)
         main_queue = Queue('slow-cruncher', exchange=email_exchange)
         with Consumer(
             connection,

@@ -37,7 +37,7 @@ That's what I did, with my invoicing code instead of `my_function`, and off I we
 
 I'll illustrate microservices and asynchronous programming in javascript, erlang and python using a simple example, the *email cruncher*. You can paste a confidential message into a text box and the email cruncher will notify you of how many emails it found in it!
 
-![js-cruncher-screenshot](https://lh5.googleusercontent.com/_aQqsnNOcfTkV4kLe3De_XN9U2fIZnM6LbhUQjPYwNJyaYwbHpJDcBNUAM5bNJ_jwS2uTRWYWdiP8WTHSAWW=w1855-h965-rw)
+![js-cruncher-screenshot](https://user-images.githubusercontent.com/14077124/35188157-20f7f3d0-fe31-11e7-91f3-358e6c8a19ca.png)
 
 The code for it is here:
 
@@ -51,7 +51,7 @@ The architecture is very simple. There are 3 microservices:
 
 Each of these microservices should have their own 'mailbox', a queue for incoming messages, in order to process them one by one.
 
-![Simple Email Cruncher](https://www.draw.io/#G1RuWMSkcY0Fkm39C4i9EqFo7lOf8Bpj_J)
+![Simple Email Cruncher](https://user-images.githubusercontent.com/14077124/35188168-5132dc9a-fe31-11e7-9b91-b831b4570bb8.png)
 
 So, keep this example in mind as we move on :smile:
 
@@ -130,7 +130,7 @@ I've implemented this in https://github.com/egeromin/async-experiments/tree/mast
 
 The architecture is actually a little bit different than originally planned, as we 'merged' 2 microservices, the uploader and the status displayer. It looks like this instead:
 
-![js-cruncher-flowchart](https://drive.google.com/open?id=18Rp7fyXmDuTeuVMpeYf0ZU6-jopWBDcw)
+![js-cruncher-flowchart](https://user-images.githubusercontent.com/14077124/35188170-55c086b8-fe31-11e7-8b35-0827794374bd.png)
 
 The code for counting the total number of emails found is the callback to the `onmessage` event in `main.js`. It reads the current number of emails from the DOM, adds the number of new emails as declared in the message, and then updates the DOM. Note that this callback takes advantage of the fact that there's only ever 1 callback running at a time in javascript. Otherwise, this would not be a reliable way of updating the total number of emails, since the total in the DOM might have changed by a different instance of the callback in some other thread. However, again, this is not an issue as there's only ever one callback running at a time and so there are no race conditions.
 
@@ -287,7 +287,7 @@ Now that we know how to use RabbitMQ using Kombu, we can architect a slightly mo
 
 Here's a flowchart:
 
-![Full Email Cruncher](https://www.draw.io/#G1hwtGh4ebB95xvB9VygmyVFIjYZu4FHwW)
+![Full Email Cruncher](https://user-images.githubusercontent.com/14077124/35188167-4eb1e970-fe31-11e7-8395-8c73e637b9c9.png)
 
 Here are our new microservices:
 
@@ -314,7 +314,7 @@ This means that instead of sending messages to exchanges, in celery you *invoke 
 
 Here's the simplified architecture of the cruncher for celery:
 
-![Celery Cruncher](https://www.draw.io/#G1w6ktpQfV_IsIDishxXj90sQcUZJU_Hnj)
+![Celery Cruncher](https://user-images.githubusercontent.com/14077124/35188166-4d0bdac2-fe31-11e7-9d81-1f10d1750bda.png)
 
 I've implemented a version of this in https://github.com/egeromin/async-experiments/tree/master/python/celery_version . Take a look at it -- in particular the README. I'll wait :wink:
 
